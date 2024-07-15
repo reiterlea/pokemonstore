@@ -13,4 +13,4 @@ RUN apt-get update && \
 WORKDIR /api
 COPY . /api
 
-CMD ["symfony", "server:start"]
+CMD ["symfony", "local:server:start", "--port=8000", "--no-tls", "--allow-http"]
