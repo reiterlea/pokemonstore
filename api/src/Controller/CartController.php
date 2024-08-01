@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CartController extends AbstractController
 {
-    #[Route('/cart', name: 'app_cart')]
+    #[Route('/api/cart', name: 'app_cart', methods: ['GET'])]
     public function index(): JsonResponse
     {
         return $this->json([

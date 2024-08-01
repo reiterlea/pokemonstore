@@ -26,8 +26,8 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\Column(type: Types::OBJECT)]
-    private ?object $images = null;
+    #[ORM\Column(type: Types::ARRAY)]
+    private array $images = [];
 
     public function getId(): ?Uuid
     {
@@ -77,15 +77,16 @@ class Product
         return $this;
     }
 
-    public function getImages(): ?object
+    public function getImages(): array
     {
         return $this->images;
     }
 
-    public function setImages(object $images): static
+    public function setImages(array $images): static
     {
         $this->images = $images;
 
         return $this;
     }
+
 }

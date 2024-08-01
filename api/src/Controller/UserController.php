@@ -10,11 +10,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use OpenApi\Attributes as OA;
 
 class UserController extends AbstractController
 {
-    #[Route('/users', name: 'users')]
+    #[OA\Get(
+        path: "/api/users",
+        summary: "Get all users",
+        responses: [new OA\Response(
+            response: 200,
+            description: "Successful operation",
+            content: new OA\JsonContent()
+        )]
+    )]
+    #[Route('/api/users', name: 'get_users', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
     {
         $usersList = $entityManager->getRepository(User::class)->findAll();
@@ -32,7 +41,22 @@ class UserController extends AbstractController
         return new JsonResponse($users, Response::HTTP_OK);
     }
 
-    #[Route('/users/{id}', name: 'user')]
+    #[OA\Get(
+        path: "/api/users/{id}",
+        summary: "Get a single user by ID",
+        parameters: [new OA\Parameter(
+            name: "id",
+            in: "path",
+            required: true,
+        )],
+        responses: [new OA\Response(
+            response: 200,
+            description: "Successful operation",
+            content: new OA\JsonContent()
+        )]
+    )]
+
+    #[Route('/api/users/{id}', name: 'get_user', methods: ['GET'])]
     public function show($id, EntityManagerInterface $entityManager): JsonResponse
     {
         $user = $entityManager->getRepository(User::class)->find($id);
@@ -49,7 +73,40 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/register', name: 'register', methods: ['POST'])]
+    #[OA\Post(
+        path: "/api/register",
+        summary: "Create a new user",
+        requestBody: new OA\RequestBody(
+            description: "User object that needs to be created",
+            required: true,
+            content: [
+                new OA\MediaType(
+                    mediaType: "application/json",
+                    schema: new OA\Schema(
+                        type: "object",
+                        properties: [
+                            new OA\Property(property: "email", type: "string"),
+                            new OA\Property(property: "first_name", type: "string"),
+                            new OA\Property(property: "last_name", type: "string"),
+                            new OA\Property(property: "username", type: "string"),
+                            new OA\Property(property: "password", type: "string"),
+                        ]
+                    )
+                )
+            ]
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: "User created"
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Internal error"
+            ),
+        ]
+    )]
+    #[Route('/api/register', name: 'register', methods: ['POST'])]
     public function register(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -71,7 +128,26 @@ class UserController extends AbstractController
         return new JsonResponse(['status' => 'User created!'], Response::HTTP_CREATED);
     }
 
-    #[Route('/users/{id}', name: 'delete_user', methods: ['DELETE'])]
+    #[OA\Delete(
+        path: "/api/users/{id}",
+        summary: "Delete a user",
+        parameters: [new OA\Parameter(
+            name: "id",
+            in: "path",
+            required: true,
+        )],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: "User deleted"
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Internal error"
+            ),
+        ]
+    )]
+    #[Route('/api/users/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function delete($id, EntityManagerInterface $entityManager): Response
     {
         $user = $entityManager->getRepository(User::class)->find($id);
@@ -81,7 +157,40 @@ class UserController extends AbstractController
         return new JsonResponse(['status' => 'User deleted'], Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/users/{id}', name: 'update_user', methods: ['PUT'])]
+    #[OA\Put(
+        path: "/api/users/{id}",
+        summary: "Update a user",
+        requestBody: new OA\RequestBody(
+            description: "User object that needs to be updated",
+            required: true,
+            content: [
+                new OA\MediaType(
+                    mediaType: "application/json",
+                    schema: new OA\Schema(
+                        type: "object",
+                        properties: [
+                            new OA\Property(property: "email", type: "string"),
+                            new OA\Property(property: "first_name", type: "string"),
+                            new OA\Property(property: "last_name", type: "string"),
+                            new OA\Property(property: "username", type: "string"),
+                            new OA\Property(property: "password", type: "string"),
+                        ]
+                    )
+                )
+            ]
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "User updated"
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Internal error"
+            ),
+        ]
+    )]
+    #[Route('/api/users/{id}', name: 'update_user', methods: ['PUT'])]
     public function update($id, EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $data = json_decode($request->getContent(), true);
@@ -102,6 +211,4 @@ class UserController extends AbstractController
 
         return new JsonResponse(['status' => 'User updated!'], Response::HTTP_OK);
     }
-
-    
 }
