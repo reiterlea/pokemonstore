@@ -8,10 +8,24 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[OA\Schema(
+    schema: "User",
+    type: "object",
+    properties: [
+        new OA\Property(property: "id", type: "string"),
+        new OA\Property(property: "username", type: "string"),
+        new OA\Property(property: "email", type: "string"),
+        new OA\Property(property: "first_name", type: "string"),
+        new OA\Property(property: "last_name", type: "string"),
+        new OA\Property(property: "roles", type: "array", items: new OA\Items(type: "string")),
+        new OA\Property(property: "password", type: "string"),
+    ]
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

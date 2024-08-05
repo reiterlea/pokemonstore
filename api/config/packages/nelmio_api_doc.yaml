@@ -4,6 +4,50 @@ nelmio_api_doc:
             title: Pokemonstore
             description: API for Pokemonstore
             version: 1.0.0
+        components:
+            schemas:
+                Product:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        name:
+                            type: string
+                        quantity:
+                            type: integer
+                        price:
+                            type: number
+                            format: float
+                User:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        username:
+                            type: string
+                        email:
+                            type: string
+                        first_name:
+                            type: string
+                        last_name:
+                            type: string
+                        password:
+                            type: string
+
+                Cart:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        user_id:
+                            type: string
+                        products:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Product"
+                        total:
+                            type: number
+                            format: float
     areas:
         path_patterns:
             - ^/api/(?!doc$).*
