@@ -84,6 +84,6 @@ class OrderController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        return new JsonResponse(['status' => 'Order created!'], Response::HTTP_CREATED);
+        return new JsonResponse(['status' => 'Order created succesfully!'], Response::HTTP_CREATED);
     }
 }
