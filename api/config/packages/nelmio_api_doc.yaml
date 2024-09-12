@@ -48,6 +48,24 @@ nelmio_api_doc:
                         total:
                             type: number
                             format: float
+                        created_at:
+                            type: date
+                Order:
+                    type: object
+                    properties:
+                        id:
+                            type: string
+                        user_id:
+                            type: string
+                        total:
+                            type: number
+                            format: float
+                        products:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Product"
+                        completed_on:
+                            type: date
     areas:
         path_patterns:
             - ^/api/(?!doc$).*

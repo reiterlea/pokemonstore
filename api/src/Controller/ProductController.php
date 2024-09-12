@@ -17,15 +17,17 @@ class ProductController extends AbstractController
     #[OA\Get(
         path: "/api/products",
         summary: "Get all products",
-        responses: [new OA\Response(
-            response: 200,
-            description: "Successful operation",
-            content: new OA\JsonContent()
-        ), 
-        new OA\Response(
-            response: 500,
-            description: "Internal error"
-        )]
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Successful operation",
+                content: new OA\JsonContent()
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Internal error"
+            )
+        ]
     )]
     #[Route('/api/products', name: 'get_products', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
@@ -36,6 +38,8 @@ class ProductController extends AbstractController
                 'id' => $product->getId(),
                 'name' => $product->getName(),
                 'description' => $product->getDescription(),
+                'category' => $product->getCategory(),
+                'image' => $product->getImage(),
                 'price' => $product->getPrice(),
             ];
         }, $productList);
@@ -163,7 +167,8 @@ class ProductController extends AbstractController
             new OA\Response(
                 response: 200,
                 description: "Product updated"
-            ), new OA\Response(
+            ),
+            new OA\Response(
                 response: 500,
                 description: "Internal error"
             ),

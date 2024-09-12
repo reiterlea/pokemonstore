@@ -10,19 +10,19 @@ lexik_jwt_authentication:
             prefix:  Bearer
             name:    Authorization
 
-        # check token in a cookie
-        cookie:
-            enabled: true
-            name:    BEARER
+        # # check token in a cookie
+        # cookie:
+        #     enabled: true
+        #     name:    BEARER
 
-        # check token in query string parameter
-        query_parameter:
-            enabled: false
-            name:    bearer
+        # # check token in query string parameter
+        # query_parameter:
+        #     enabled: false
+        #     name:    bearer
 
-        # check token in a cookie
-        split_cookie:
-            enabled: false
-            cookies:
-                - jwt_hp
-                - jwt_s
+        # # check token in a cookie
+        # split_cookie:
+        #     enabled: false
+        #     cookies:
+        #         - jwt_hp
+        #         - jwt_s
